@@ -1,0 +1,117 @@
+<!-- ================= FRONTEND (index.html) ================= -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Portfolio Form</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>My Portfolio</h1>
+
+    <form id="portfolioForm">
+      <input type="text" id="name" placeholder="Your Name" required>
+      <input type="email" id="email" placeholder="Your Email" required>
+      <textarea id="message" placeholder="Your Message"></textarea>
+      <button type="submit">Submit</button>
+    </form>
+
+    <p id="response"></p>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
+
+<!-- ================= CSS (style.css) ================= -->
+
+<!-- ================= JAVASCRIPT (script.js) ================= -->
+document.getElementById("portfolioForm").addEventListener("submit", async function(e) {
+  e.preventDefault();
+
+  const data = {
+    name: document.getElementById("name").value,
+    email: document.getElementById("email").value,
+    message: document.getElementById("message").value
+  };
+
+  const res = await fetch("http://127.0.0.1:5000/submit", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data)
+  });
+
+  const result = await res.json();
+  document.getElementById("response").innerText = result.message;
+});
+
+
+<!-- ================= BACKEND (app.py) ================= -->
+from flask import Flask, request, jsonify
+import mysql.connector
+from flask_cors import CORS
+
+app = Flask(__name__)
+CORS(app)
+
+# MySQL connection
+conn = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    password="yourpassword",
+    database="portfolio_db"
+)
+
+cursor = conn.cursor()
+
+@app.route('/submit', methods=['POST'])
+def submit():
+    data = request.get_json()
+    name = data['name']
+    email = data['email']
+    message = data['message']
+
+    query = "INSERT INTO users (name, email, message) VALUES (%s, %s, %s)"
+    cursor.execute(query, (name, email, message))
+    conn.commit()
+
+    return jsonify({"message": "Data saved successfully!"})
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+
+<!-- ================= DATABASE (MySQL) ================= -->
+-- Run this in MySQL
+CREATE DATABASE portfolio_db;
+USE portfolio_db;
+
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100),
+    email VARCHAR(100),
+    message TEXT
+);
+
+
+<!-- ================= GITHUB HOSTING NOTES ================= -->
+<!--
+1. Create a GitHub repository
+2. Upload files: index.html, style.css, script.js
+3. Go to Settings > Pages
+4. Select branch: main
+5. Your frontend will be live
+
+IMPORTANT:
+GitHub Pages ONLY hosts frontend.
+Backend (Flask + MySQL) must be hosted on:
+- Render
+- Railway
+- PythonAnywhere
+
+Then replace fetch URL with your hosted backend URL.
+-->
