@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registered Users</title>
+</head>
+<body>
+
+<h1>Registered Users</h1>
+
+<table border="1" cellpadding="10">
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>College</th>
+        <th>Event</th>
+    </tr>
+
+    {% for user in users %}
+    <tr>
+        <td>{{ user.id }}</td>
+        <td>{{ user.name }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.phone }}</td>
+        <td>{{ user.college }}</td>
+        <td>{{ user.event }}</td>
+    </tr>
+    {% endfor %}
+
+</table>
+
+<br>
+<a href="/">⬅ Back to Home</a>
+
+</body>
+</html>
