@@ -3,7 +3,7 @@ import sqlite3
 
 app = Flask(__name__)
 
-# Connect DB
+# DB connection
 def get_db_connection():
     conn = sqlite3.connect('database.db')
     conn.row_factory = sqlite3.Row
@@ -27,10 +27,12 @@ def create_table():
 
 create_table()
 
+# Home page
 @app.route("/")
 def home():
     return render_template("index.html")
 
+# Handle form submission
 @app.route("/register", methods=["POST"])
 def register():
     name = request.form["name"]
@@ -48,6 +50,14 @@ def register():
     conn.close()
 
     return redirect("/")
+
+# View all data
+@app.route("/data")
+def view_data():
+    conn = get_db_connection()
+    users = conn.execute("SELECT * FROM registrations").fetchall()
+    conn.close()
+    return render_template("data.html", users=users)
 
 if __name__ == "__main__":
     app.run(debug=True)
