@@ -14,34 +14,16 @@ body {
     text-align: center;
 }
 
-h1 {
-    font-size: 20px;
-    color: #333;
-}
-
-h2 {
-    margin-bottom: 20px;
-}
-
 input, select {
     width: 100%;
     padding: 10px;
     margin: 10px 0;
-    border-radius: 5px;
-    border: 1px solid #ccc;
 }
 
 button {
-    width: 100%;
-    padding: 12px;
+    padding: 10px;
     background: #4facfe;
     color: white;
     border: none;
-    border-radius: 5px;
-    font-size: 16px;
     cursor: pointer;
-}
-
-button:hover {
-    background: #00c6ff;
 }
